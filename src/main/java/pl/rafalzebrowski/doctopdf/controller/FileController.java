@@ -1,5 +1,6 @@
 package pl.rafalzebrowski.doctopdf.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import static pl.rafalzebrowski.doctopdf.common.FileUtils.DEFAULT_OUTPUT_EXTENSION;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/file")
 public class FileController {
@@ -38,6 +40,7 @@ public class FileController {
 
     @PostMapping
     public String upload(@RequestParam MultipartFile inputFile) {
+        log.info("Uploading and converting file: " + inputFile.getOriginalFilename());
         fileValidator.validateExtension(inputFile);
         File tempFile = fileService.saveToTemp(inputFile);
 
@@ -45,18 +48,21 @@ public class FileController {
         File outputFile = fileService.saveArrayByteToFile(result, FileUtils.getFilenameWithoutExtension(inputFile));
 
         tempFile.delete();
+        log.info("Converted filename: " + outputFile.getName());
 
         return outputFile.getName();
     }
 
     @GetMapping("/{fileName}")
     public ResponseEntity<byte[]> download(@PathVariable("fileName") String fileName) throws IOException {
+        log.info("Downloading file: " + fileName);
         byte[] result = fileService.downloadFileBytes(fileName);
         return getResponse(result, fileName);
     }
 
     @PostMapping("/convert")
     public ResponseEntity<byte[]> convert(@RequestParam("inputFile") final MultipartFile inputFile) {
+        log.info("Converting file: " + inputFile.getOriginalFilename());
         fileValidator.validateExtension(inputFile);
         File tempFile = fileService.saveToTemp(inputFile);
 
