@@ -17,22 +17,24 @@ import static pl.rafalzebrowski.doctopdf.common.FileUtils.DEFAULT_OUTPUT_EXTENSI
 @Service
 public class FileServiceImpl implements FileService {
 
+    private static final String FILE_LOCATION = "../tmp/";
+
     @Override
     public File saveToTemp(MultipartFile file) {
-        File tempFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
+        File tempFile = new File(FILE_LOCATION + Objects.requireNonNull(file.getOriginalFilename()));
         saveToFile(file, tempFile);
         return tempFile;
     }
 
     @Override
     public File saveArrayByteToFile(byte[] bytes, String fileName) {
-        File outputFile = new File(fileName + DEFAULT_OUTPUT_EXTENSION);
+        File outputFile = new File(FILE_LOCATION + fileName + DEFAULT_OUTPUT_EXTENSION);
         saveToFile(bytes, outputFile);
         return outputFile;
     }
 
     public byte[] downloadFileBytes(String fileName) throws IOException {
-        File file = new File(fileName);
+        File file = new File(FILE_LOCATION + fileName);
         try {
             return Files.readAllBytes(file.toPath());
         } catch (NoSuchFileException ex) {
