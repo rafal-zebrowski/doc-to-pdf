@@ -1,0 +1,89 @@
+body {
+    background-color: #f1f1f1;
+}
+
+.banner {
+    width: 500px;
+    margin: 20px auto auto;
+    text-align: center;
+}
+
+.banner-title {
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.banner-subtitle {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.base-container {
+    position: relative;
+    background-color: #fdfdfd;
+    width: 500px;
+    height: 100%;
+    margin: 30px auto auto;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 30px 0 #ababab;
+    -webkit-box-shadow: 10px 10px 30px 0 #ababab;
+    -moz-box-shadow: 10px 10px 30px 0 #ababab;
+}
+
+.base-button {
+    margin-top: 10px;
+    min-width: 113px;
+}
+
+.trash {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.trash:hover {
+    color: #555555
+}
+
+#error-container {
+    display: flex;
+    background-color: #fb00008c;
+    border: red 2px solid;
+    line-height: 80px;
+    height: 80px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+#error-message {
+    color: white;
+}
+
+.loader-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #adadad;
+    width: 500px;
+    height: 100%;
+    line-height: 300px;
+    display: flex;
+    border-radius: 10px;
+    z-index: 999;
+    opacity: 0.95;
+}
+
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #adadad;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

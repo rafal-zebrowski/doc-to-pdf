@@ -1,11 +1,11 @@
-let convertedFileName = null;
 
 function _convert() {
     var selectedFile = document.getElementById('file-upload').files[0];
     validateSelectedFile(selectedFile);
+    showLoader();
 
     upload(selectedFile)
-        .done(response => convertedFileName = response)
+        .done(onUploadSuccess)
         .fail(onUploadFail);
 }
 
@@ -35,14 +35,20 @@ function validateSelectedFile(file) {
     }
 }
 
+function onUploadSuccess(response) {
+    convertedFile.name = response;
+    hideLoader();
+}
+
 function onUploadFail(error) {
-    convertedFileName = null;
+    convertedFile.name = null;
+    hideLoader();
     catchError(error);
 }
 
 function _download() {
     validateFileName();
-    $.ajax('file/' + convertedFileName, {
+    $.ajax('file/' + convertedFile.name, {
         method: "GET",
         xhrFields:{
             responseType: 'blob'
@@ -53,7 +59,7 @@ function _download() {
 }
 
 function validateFileName() {
-    if(!convertedFileName) {
+    if(!convertedFile.name) {
         alert("Wystąpił błąd!");
         throw Error();
     }
@@ -71,11 +77,23 @@ function createLink(url) {
     const a = document.createElement('a');
     a.style.display = 'none';
     a.href = url;
-    a.download = convertedFileName;
+    a.download = convertedFile.name;
     return a;
 }
 
 function catchError(error) {
-    alert(error.responseJSON.message);
-    throw Error(error.responseJSON.message);
+    showErrorInContainer(error.responseJSON.message);
+    console.error(Error(error.responseJSON.message));
 }
+
+function showErrorInContainer(message) {
+    showElement("#error-container");
+    $("#error-message").html(message);
+}
+
+$(document)
+    .ajaxError(
+        function(event, jqxhr, settings, exception) {
+            var message = jqxhr.responseJSON.message;
+            showErrorInContainer(message);
+        });
